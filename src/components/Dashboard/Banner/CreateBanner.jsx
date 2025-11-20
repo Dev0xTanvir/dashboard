@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,10 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axios from "axios";
+import { api } from "../../../Utils/axios";
 
-// ! New Correct Schema
-
+// Schema
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   link: z.string().url("Invalid link").optional(),
@@ -27,6 +26,9 @@ const formSchema = z.object({
 });
 
 export function CreateBanner() {
+  const [banners, setBanners] = useState([]);
+  const [editslug, seteditslug] = useState(null);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,116 +39,161 @@ export function CreateBanner() {
     },
   });
 
-    //  ! create banner data fetch axios
+  // Fetch all banners
+  const fetchBanners = async () => {
+    const res = await api.get("/banner/getall-banner");
+    setBanners(res.data.data);
+  };
 
+  useEffect(() => {
+    fetchBanners();
+  }, []);
+
+  // Submit create/update
   async function onSubmit(values) {
-    console.log("Final Form Values:", values);
-
     const formData = new FormData();
-
-    // Append form fields
-    formData.append("title", values.title || "");
+    formData.append("title", values.title);
     formData.append("link", values.link || "");
-    formData.append("position", values.position || "");
-    formData.append("image", values.image); // File object
+    formData.append("position", values.position);
+    if (values.image) formData.append("image", values.image);
 
-    try {
-      const respons = await axios.post(
-        "http://localhost:3000/api/v1/banner/create-banner",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log("Response:", respons.data);
-    } catch (error) {
-      console.log("Upload error:", error);
+    if (!editslug) {
+    const response =  await api.post("/banner/create-banner", formData);
+    console.log(response)
+    } else {
+      await api.put(`/banner/update-banner/${editslug}`, formData);
+      seteditslug(null);
     }
+
+    form.reset();
+    fetchBanners();
   }
 
+
+  // Edit
+  const handleEdit = (item) => {
+    seteditslug(item.slug);
+    form.setValue("title", item.title);
+    form.setValue("link", item.link);
+    form.setValue("position", item.position);
+    form.setValue("image", null);
+  };
+
+  // Delete
+  const handleDelete = async (slug) => {
+    await api.delete(`/banner/delete-banner/${slug}`);
+    fetchBanners();
+  };
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Title */}
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Banner Title" {...field} />
-              </FormControl>
-              <FormDescription>Enter banner title</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div className="p-6 space-y-10">
+      {/* CREATE / UPDATE FORM */}
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 border p-6 rounded-xl shadow"
+        >
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Banner Title" {...field} />
+                </FormControl>
+                <FormDescription>Enter banner title</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Link */}
-        <FormField
-          control={form.control}
-          name="link"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Link</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="https://example.com"
-                  {...field}
-                  onChange={(e) => field.onChange(e.target.value)}
-                />
-              </FormControl>
-              <FormDescription>The URL for the banner</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="link"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Position */}
-        <FormField
-          control={form.control}
-          name="position"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Position</FormLabel>
-              <FormControl>
-                <Input placeholder="1, 2, 3..." {...field} />
-              </FormControl>
-              <FormDescription>Banner position</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="position"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Position</FormLabel>
+                <FormControl>
+                  <Input placeholder="1, 2, 3..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Image Upload */}
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    field.onChange(file);
-                  }}
-                />
-              </FormControl>
-              <FormDescription>Upload banner image</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Image</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => field.onChange(e.target.files?.[0])}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+          <Button type="submit">
+            {editslug ? "Update Banner" : "Create Banner"}
+          </Button>
+        </form>
+      </Form>
+
+      {/* BANNER LIST */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {banners.map((item) => (
+          <div
+            key={item._id}
+            className="border p-4 rounded-xl shadow space-y-2"
+          >
+            <img
+              src={item.image}
+              className="w-full h-40 object-cover rounded"
+            />
+            <h2 className="font-bold">{item.title}</h2>
+            <p>Link: {item.link}</p>
+            <p>Position: {item.position}</p>
+
+            <div className="flex gap-3">
+              <Button
+                className="bg-yellow-500"
+                onClick={() => handleEdit(item)}
+              >
+                Edit
+              </Button>
+              <Button
+                className="bg-red-600"
+                onClick={() => handleDelete(item.slug)}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
+
+export default CreateBanner;
