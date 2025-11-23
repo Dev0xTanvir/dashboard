@@ -4,11 +4,12 @@ const api = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/${
     import.meta.env.VITE_BASE_API
   }`,
+  withCredentials: true,
 });
 
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accesToken");
+    const token = JSON.parse(localStorage.getItem("accessToken"));
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
