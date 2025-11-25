@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -23,6 +23,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { api } from "../../../Utils/axios";
+import { useGetAllBanner } from "../../Api/Api";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -32,9 +33,10 @@ const formSchema = z.object({
 });
 
 export function CreateBanner() {
-  const [banners, setBanners] = useState([]);
   const [editslug, seteditslug] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  const { data: banners = [], isLoading, isError, refetch } = useGetAllBanner();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -46,25 +48,7 @@ export function CreateBanner() {
     },
   });
 
-  const fetchBanners = async () => {
-    try {
-      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
-      const res = await api.get("/banner/getall-banner", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true,
-      });
-      setBanners(res.data.data);
-    } catch (err) {
-      console.error("Fetch banners error:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchBanners();
-  }, []);
-
+  // ! Submit (Create / Update)
   async function onSubmit(values) {
     const formData = new FormData();
     formData.append("title", values.title);
@@ -80,16 +64,12 @@ export function CreateBanner() {
     try {
       if (!editslug) {
         await api.post("/banner/create-banner", formData, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` },
           withCredentials: true,
         });
       } else {
         await api.put(`/banner/update-banner/${editslug}`, formData, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` },
           withCredentials: true,
         });
         seteditslug(null);
@@ -97,12 +77,13 @@ export function CreateBanner() {
 
       form.reset();
       setPreview(null);
-      fetchBanners();
+      refetch();
     } catch (err) {
       console.error("Banner submit error:", err);
     }
   }
 
+  // ! Edit Handler
   const handleEdit = (item) => {
     seteditslug(item.slug);
     form.setValue("title", item.title);
@@ -112,23 +93,39 @@ export function CreateBanner() {
     setPreview(item.image?.[0]?.secure_url);
   };
 
+  // ! Delete Handler
   const handleDelete = async (slug) => {
     const accessToken = JSON.parse(localStorage.getItem("accessToken"));
     try {
       await api.delete(`/banner/delete-banner/${slug}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
         withCredentials: true,
       });
-      fetchBanners();
+      refetch();
     } catch (err) {
       console.error("Delete banner error:", err);
     }
   };
 
+  // ! Loading UI
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  // ! Error UI
+  if (isError) {
+    return (
+      <p className="text-center text-red-500">Failed to load banners ❌</p>
+    );
+  }
+
   return (
     <div className="p-6 space-y-10">
+      {/*  Form */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -189,9 +186,7 @@ export function CreateBanner() {
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       field.onChange(file);
-                      if (file) {
-                        setPreview(URL.createObjectURL(file));
-                      }
+                      if (file) setPreview(URL.createObjectURL(file));
                     }}
                   />
                 </FormControl>
@@ -212,6 +207,7 @@ export function CreateBanner() {
         </form>
       </Form>
 
+      {/*  Table */}
       <Table>
         <TableHeader>
           <TableRow>
