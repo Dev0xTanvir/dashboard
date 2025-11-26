@@ -207,7 +207,7 @@ export function CreateBanner() {
         </form>
       </Form>
 
-      {/*  Table */}
+      {/*Table */}
       <Table>
         <TableHeader>
           <TableRow>

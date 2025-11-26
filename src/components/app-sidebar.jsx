@@ -82,29 +82,53 @@ const data = {
         },
       ],
     },
+
     {
-      title: "Documentation",
+      title: "Brand",
       url: "#",
-      icon: BookOpen,
+      icon: Bot,
       items: [
         {
-          title: "Introduction",
+          title: "Create Brand",
           url: "#",
         },
         {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "All Brand",
           url: "#",
         },
       ],
     },
+    {
+      title: "Product",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Product",
+          url: "#",
+        },
+        {
+          title: "All Product",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Variant",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Variant",
+          url: "#",
+        },
+        {
+          title: "All Variant",
+          url: "#",
+        },
+      ],
+    },
+
     {
       title: "Settings",
       url: "#",
