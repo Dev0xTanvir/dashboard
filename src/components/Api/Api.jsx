@@ -20,3 +20,45 @@ export const useGetAllBanner = () => {
     },
   });
 };
+
+// GetallCategory 
+
+export const useGetAllCategory = () => {
+  return useQuery({
+    queryKey: ["getallbanner"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/category/getall-category", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+// GetallSubCategory 
+
+export const useGetAllSubCategory = () => {
+  return useQuery({
+    queryKey: ["getallbanner"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/subcategory/getall-subcategory", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+

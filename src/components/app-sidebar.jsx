@@ -74,10 +74,25 @@ const data = {
       items: [
         {
           title: "Create Category",
-          url: "#",
+          url: "CreateCategory",
         },
         {
           title: "All Category",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Sub Category",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create subCategory",
+          url: "CreateSubCategory",
+        },
+        {
+          title: "All subCategory",
           url: "#",
         },
       ],
