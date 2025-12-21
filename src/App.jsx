@@ -8,6 +8,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import CreateCategory from "./components/Dashboard/Category/Category";
 import CreateSubCategory from "./components/Dashboard/SubCategory/SubCategory";
+import CreateBrand from "./components/Dashboard/Brand/Brand";
+import CreateDiscount from "./components/Dashboard/Discount/Discount";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -20,6 +22,8 @@ const App = () => {
             <Route path="/CreateBanner" element={<CreateBanner />} />
             <Route path="/CreateCategory" element={<CreateCategory />} />
             <Route path="/CreateSubCategory" element={<CreateSubCategory />} />
+            <Route path="/CreateBrand" element={<CreateBrand />} />
+            <Route path="/CreateDiscount" element={<CreateDiscount />} />
           </Route>
           <Route>
             <Route path="/singup" element={<SignupPage />} />

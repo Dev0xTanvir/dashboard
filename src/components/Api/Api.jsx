@@ -61,4 +61,44 @@ export const useGetAllSubCategory = () => {
   });
 };
 
+// GetAllBrand
+
+export const useGetAllBrand = () => {
+  return useQuery({
+    queryKey: ["getallbanner"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/brand/getall-brand", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+// GetAllDiscount
+
+export const useGetAllDiscount = () => {
+  return useQuery({
+    queryKey: ["getallbanner"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/discount/getalldiscount-create", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
 

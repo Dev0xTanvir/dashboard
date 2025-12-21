@@ -105,10 +105,25 @@ const data = {
       items: [
         {
           title: "Create Brand",
-          url: "#",
+          url: "CreateBrand",
         },
         {
           title: "All Brand",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Discount",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Discount",
+          url: "CreateDiscount",
+        },
+        {
+          title: "All Discount",
           url: "#",
         },
       ],
