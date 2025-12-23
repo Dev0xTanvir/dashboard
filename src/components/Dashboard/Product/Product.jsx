@@ -61,6 +61,7 @@ const ProductSchema = z.object({
 });
 
 /* ---------------- REUSABLE ARRAY FIELD ---------------- */
+
 const ArrayInputField = ({ form, name, label }) => {
   const values = form.watch(name) || [];
 
@@ -167,7 +168,7 @@ export default function ProductPage() {
       manufactureCountry: "",
       rating: 0,
       variantType: "single",
-      variant: [""] || "",
+      variant: [] || "",
       size: [],
       color: [],
       tag: [],
@@ -197,21 +198,25 @@ export default function ProductPage() {
     const token = JSON.parse(localStorage.getItem("accessToken"));
     const formData = new FormData();
 
-    Object.entries(values).forEach(([key, val]) => {
-      // images only if exist
-      if (key === "image" && val?.length) {
-        Array.from(val).forEach((file) => formData.append("image", file));
+    Object.keys(values).forEach((key) => {
+      const value = values[key];
+
+      if (value === undefined || value === null) return;
+
+      // 🔥 IMAGE
+      if (key === "image") {
+        if (value && value.length > 0) {
+          Array.from(value).forEach((file) => {
+            formData.append("image", file);
+          });
+        }
+        return;
       }
-      // arrays
-      else if (
-        ["size", "color", "tag", "variant"].includes(key) &&
-        val?.length
-      ) {
-        val.forEach((v, i) => formData.append(`${key}[${i}]`, v));
-      }
-      // other simple fields
-      else if (val !== undefined && val !== null) {
-        formData.append(key, val);
+
+      if (Array.isArray(value)) {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value);
       }
     });
 
@@ -221,16 +226,24 @@ export default function ProductPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        await api.put(`/product/update-product/${editslug}`, formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const updated = await api.put(
+          `/product/update-product/${editslug}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        // ---------------- FIX 3: optimistic UI update ----------------
+        setProducts((prev) =>
+          prev.map((p) => (p.slug === editslug ? updated.data.data : p))
+        );
         setEditslug(null);
       }
 
-      const prodRes = await api.get("/product/getall-product", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setProducts(prodRes.data.data || []);
       form.reset();
       setPreview([]);
     } catch (err) {
@@ -256,7 +269,7 @@ export default function ProductPage() {
       manufactureCountry: product.manufactureCountry,
       rating: product.rating,
       variantType: product.variantType,
-      variant: product.variant || [""],
+      variant: product.variant || [],
       size: product.size || [],
       color: product.color || [],
       tag: product.tag || [],
@@ -272,7 +285,7 @@ export default function ProductPage() {
       totalSell: product.totalSell || 0,
       image: [],
     });
-    setPreview(product.images?.[0].secure_url || []);
+    setPreview(product.image?.map((img) => img.secure_url) || []);
   };
 
   /* ------------------ DELETE ------------------ */
@@ -419,15 +432,16 @@ export default function ProductPage() {
             name="image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Product Images</FormLabel>
+                <FormLabel>Images</FormLabel>
                 <FormControl>
                   <Input
                     type="file"
                     multiple
                     accept="image/*"
                     onChange={(e) => {
-                      field.onChange(e.target.files?.[0].secure_url);
-                      setPreview([...e.target.files]);
+                      const files = e.target.files;
+                      field.onChange(files);
+                      setPreview(Array.from(files));
                     }}
                   />
                 </FormControl>
@@ -498,11 +512,10 @@ export default function ProductPage() {
               </TableCell>
               <TableCell>{p.totalSell}</TableCell>
               <TableCell className="flex gap-2">
-                {p.images?.map((img, idx) => (
+                {p.image?.map((img, i) => (
                   <img
-                    key={idx}
-                    src={img?.[0].secure_url}
-                    alt="product"
+                    key={i}
+                    src={img.secure_url}
                     className="h-12 w-12 object-cover rounded"
                   />
                 ))}
