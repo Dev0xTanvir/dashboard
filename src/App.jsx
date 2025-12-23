@@ -10,6 +10,7 @@ import CreateCategory from "./components/Dashboard/Category/Category";
 import CreateSubCategory from "./components/Dashboard/SubCategory/SubCategory";
 import CreateBrand from "./components/Dashboard/Brand/Brand";
 import CreateDiscount from "./components/Dashboard/Discount/Discount";
+import CreateProduct from "./components/Dashboard/Product/Product";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => {
             <Route path="/CreateSubCategory" element={<CreateSubCategory />} />
             <Route path="/CreateBrand" element={<CreateBrand />} />
             <Route path="/CreateDiscount" element={<CreateDiscount />} />
+            <Route path="/CreateProduct" element={<CreateProduct />} />
           </Route>
           <Route>
             <Route path="/singup" element={<SignupPage />} />

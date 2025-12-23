@@ -135,7 +135,7 @@ const data = {
       items: [
         {
           title: "Create Product",
-          url: "#",
+          url: "CreateProduct",
         },
         {
           title: "All Product",

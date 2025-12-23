@@ -101,4 +101,24 @@ export const useGetAllDiscount = () => {
   });
 };
 
+// GetAllProduct
+
+export const useGetAllProduct = () => {
+  return useQuery({
+    queryKey: ["getallbanner"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/product/getall-product", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
 
