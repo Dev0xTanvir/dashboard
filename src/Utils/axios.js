@@ -15,7 +15,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 axios.interceptors.request.use(
@@ -30,12 +30,12 @@ axios.interceptors.request.use(
         const res = await api.post(
           "/auth/refresh",
           {},
-          { withCredentials: true }
+          { withCredentials: true },
         );
         const newaccesstoken = res.data.accesToken;
         localStorage.setItem("accesToken", newaccesstoken);
       }
     } catch (error) {}
-  }
+  },
 );
 export { api };

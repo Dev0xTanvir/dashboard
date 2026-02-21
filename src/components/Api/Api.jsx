@@ -25,7 +25,7 @@ export const useGetAllBanner = () => {
 
 export const useGetAllCategory = () => {
   return useQuery({
-    queryKey: ["getallbanner"],
+    queryKey: ["getallcategory"],
     queryFn: async () => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -45,7 +45,7 @@ export const useGetAllCategory = () => {
 
 export const useGetAllSubCategory = () => {
   return useQuery({
-    queryKey: ["getallbanner"],
+    queryKey: ["getallsubcategory"],
     queryFn: async () => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -65,7 +65,7 @@ export const useGetAllSubCategory = () => {
 
 export const useGetAllBrand = () => {
   return useQuery({
-    queryKey: ["getallbanner"],
+    queryKey: ["getallbrand"],
     queryFn: async () => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -85,7 +85,7 @@ export const useGetAllBrand = () => {
 
 export const useGetAllDiscount = () => {
   return useQuery({
-    queryKey: ["getallbanner"],
+    queryKey: ["getalldiscount"],
     queryFn: async () => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
@@ -105,11 +105,31 @@ export const useGetAllDiscount = () => {
 
 export const useGetAllProduct = () => {
   return useQuery({
-    queryKey: ["getallbanner"],
+    queryKey: ["getallproduct"],
     queryFn: async () => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
       const response = await api.get("/product/getall-product", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+// GetAllVarient
+
+export const useGetAllVarient = () => {
+  return useQuery({
+    queryKey: ["getallvarient"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/variant/getall-variant", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

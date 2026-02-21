@@ -150,7 +150,7 @@ const data = {
       items: [
         {
           title: "Create Variant",
-          url: "#",
+          url: "CreateVariant",
         },
         {
           title: "All Variant",
