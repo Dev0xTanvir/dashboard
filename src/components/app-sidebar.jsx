@@ -143,6 +143,7 @@ const data = {
         },
       ],
     },
+
     {
       title: "Variant",
       url: "#",
@@ -154,6 +155,38 @@ const data = {
         },
         {
           title: "All Variant",
+          url: "#",
+        },
+      ],
+    },
+
+    {
+      title: "Coupon",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Coupon",
+          url: "CreateCoupon",
+        },
+        {
+          title: "All Coupon",
+          url: "#",
+        },
+      ],
+    },
+
+    {
+      title: "Warrenty",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Warrenty",
+          url: "CreateWarrenty",
+        },
+        {
+          title: "All Warrenty",
           url: "#",
         },
       ],

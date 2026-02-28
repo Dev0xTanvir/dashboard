@@ -21,7 +21,7 @@ export const useGetAllBanner = () => {
   });
 };
 
-// GetallCategory 
+// GetallCategory
 
 export const useGetAllCategory = () => {
   return useQuery({
@@ -41,7 +41,7 @@ export const useGetAllCategory = () => {
   });
 };
 
-// GetallSubCategory 
+// GetallSubCategory
 
 export const useGetAllSubCategory = () => {
   return useQuery({
@@ -141,4 +141,42 @@ export const useGetAllVarient = () => {
   });
 };
 
+// GetAllCoupon
 
+export const useGetAllCoupon = () => {
+  return useQuery({
+    queryKey: ["getallcoupon"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/copun/getall-copun", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+// GetAllWarrenty
+
+export const useGetAllWarrenty = () => {
+  return useQuery({
+    queryKey: ["getallWarrenty"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/warrenty/getall-warrenty", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};

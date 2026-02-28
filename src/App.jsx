@@ -5,19 +5,21 @@ import { CreateBanner } from "./components/Dashboard/Banner/CreateBanner";
 import SignupPage from "./components/Dashboard/Auth/Registration";
 import Login from "./components/Dashboard/Auth/Login";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import CreateCategory from "./components/Dashboard/Category/Category";
 import CreateSubCategory from "./components/Dashboard/SubCategory/SubCategory";
 import CreateBrand from "./components/Dashboard/Brand/Brand";
 import CreateDiscount from "./components/Dashboard/Discount/Discount";
 import CreateProduct from "./components/Dashboard/Product/Product";
 import CreateVariant from "./components/Dashboard/Varient/Varient";
+import CreateCoupon from "./components/Dashboard/Coupon/Coupon";
+import CreateWarrenty from "./components/Dashboard/Warrenty/Warrenty";
 
 const App = () => {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-       <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />}>
@@ -28,6 +30,8 @@ const App = () => {
             <Route path="/CreateDiscount" element={<CreateDiscount />} />
             <Route path="/CreateProduct" element={<CreateProduct />} />
             <Route path="/CreateVariant" element={<CreateVariant />} />
+            <Route path="/CreateCoupon" element={<CreateCoupon />} />
+            <Route path="/CreateWarrenty" element={<CreateWarrenty />} />
           </Route>
           <Route>
             <Route path="/singup" element={<SignupPage />} />
