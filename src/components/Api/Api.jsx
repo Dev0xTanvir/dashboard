@@ -180,3 +180,44 @@ export const useGetAllWarrenty = () => {
     },
   });
 };
+
+// GetAllShipinginfo
+
+export const useGetAllShipinginfo = () => {
+  return useQuery({
+    queryKey: ["getallShipinginfo"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/shipinginfo/getall-shiping", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+
+// GetAllWearhouse
+
+export const useGetAllWearhouse = () => {
+  return useQuery({
+    queryKey: ["getallWearhouse"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/wearhouse/getall-wearhouse", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};

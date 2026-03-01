@@ -192,6 +192,38 @@ const data = {
       ],
     },
 
+     {
+      title: "Shipinginfo",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Shipinginfo",
+          url: "CreateShipinginfo",
+        },
+        {
+          title: "All Shipinginfo",
+          url: "#",
+        },
+      ],
+    },
+
+    {
+      title: "Wearhouse",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Wearhouse",
+          url: "CreateWearhouse",
+        },
+        {
+          title: "All Wearhouse",
+          url: "#",
+        },
+      ],
+    },
+
     {
       title: "Settings",
       url: "#",
