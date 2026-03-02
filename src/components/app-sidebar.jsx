@@ -224,6 +224,22 @@ const data = {
       ],
     },
 
+        {
+      title: "Cart",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Cart",
+          url: "CreateCart",
+        },
+        {
+          title: "All Cart",
+          url: "#",
+        },
+      ],
+    },
+
     {
       title: "Settings",
       url: "#",

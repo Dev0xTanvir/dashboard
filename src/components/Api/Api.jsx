@@ -221,3 +221,23 @@ export const useGetAllWearhouse = () => {
     },
   });
 };
+
+// GetAllCart
+
+export const useGetAllCart = () => {
+  return useQuery({
+    queryKey: ["getallCart"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/cart/getcart", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};

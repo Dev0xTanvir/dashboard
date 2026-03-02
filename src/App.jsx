@@ -16,6 +16,7 @@ import CreateCoupon from "./components/Dashboard/Coupon/Coupon";
 import CreateWarrenty from "./components/Dashboard/Warrenty/Warrenty";
 import CreateShipinginfo from "./components/Dashboard/Shipinginfo/Shipinginfo";
 import CreateWearhouse from "./components/Dashboard/Wearhouse/Wearhouse";
+import CreateCart from "./components/Dashboard/Cart/Cart";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="/CreateWarrenty" element={<CreateWarrenty />} />
             <Route path="/CreateShipinginfo" element={<CreateShipinginfo />} />
             <Route path="/CreateWearhouse" element={<CreateWearhouse />} />
+            <Route path="/CreateCart" element={<CreateCart />} />
           </Route>
           <Route>
             <Route path="/singup" element={<SignupPage />} />
