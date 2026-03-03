@@ -192,7 +192,7 @@ const data = {
       ],
     },
 
-     {
+    {
       title: "Shipinginfo",
       url: "#",
       icon: Bot,
@@ -224,7 +224,7 @@ const data = {
       ],
     },
 
-        {
+    {
       title: "Cart",
       url: "#",
       icon: Bot,
@@ -235,6 +235,22 @@ const data = {
         },
         {
           title: "All Cart",
+          url: "#",
+        },
+      ],
+    },
+
+    {
+      title: "Deliverycharge",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Deliverycharge",
+          url: "CreateDeliverycharge",
+        },
+        {
+          title: "All Deliverycharge",
           url: "#",
         },
       ],

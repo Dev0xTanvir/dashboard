@@ -241,3 +241,23 @@ export const useGetAllCart = () => {
     },
   });
 };
+
+// GetAllDeliverycharge
+
+export const useGetAllDeliverycharge = () => {
+  return useQuery({
+    queryKey: ["getallDeliverycharge"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/deliverycharge/getalldelivery-create", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};

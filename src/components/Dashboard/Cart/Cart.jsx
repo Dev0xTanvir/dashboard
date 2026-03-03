@@ -18,9 +18,9 @@ import { api } from "../../../Utils/axios";
 
 // ---------------- SCHEMA ----------------
 const CartSchema = z.object({
-  guestId: z.string().min(1, "Guest ID required"),
+  guestId: z.string().min(1),
   product: z.string().optional(),
-  variant: z.string().min(1, "Variant required"),
+  variant: z.string().min(1),
   quantity: z.coerce.number().min(1),
   size: z.string().optional(),
   color: z.string().optional(),
@@ -31,12 +31,10 @@ export default function CreateCart() {
   const [carts, setCarts] = useState([]);
   const [editId, setEditId] = useState(null);
 
-  const storedGuestId = localStorage.getItem("guestId");
-
   const form = useForm({
     resolver: zodResolver(CartSchema),
     defaultValues: {
-      guestId: storedGuestId || "",
+      guestId: "",
       product: "",
       variant: "",
       quantity: 1,
@@ -46,7 +44,18 @@ export default function CreateCart() {
     },
   });
 
-  const guestId = form.watch("guestId");
+  // ---------------- AUTO GUEST ID ----------------
+  useEffect(() => {
+    let id = localStorage.getItem("guestId");
+
+    if (!id) {
+      id = "guest-" + Date.now();
+      localStorage.setItem("guestId", id);
+    }
+
+    form.setValue("guestId", id);
+    getCart(id);
+  }, []);
 
   // ---------------- GET CART ----------------
   const getCart = async (id) => {
@@ -55,22 +64,21 @@ export default function CreateCart() {
     try {
       const res = await api.get("/cart/getcart", {
         params: { guestId: id },
+        headers: { "Cache-Control": "no-cache" },
       });
 
-      console.log("API RESPONSE =>", res.data);
+      const cartData = res.data?.data;
 
-      setCarts(res.data.data?.items ?? []);
+      if (cartData && Array.isArray(cartData.items)) {
+        setCarts(cartData.items);
+      } else {
+        setCarts([]);
+      }
     } catch (err) {
       console.error(err);
       setCarts([]);
     }
   };
-
-  useEffect(() => {
-    if (guestId) {
-      getCart(guestId);
-    }
-  }, [guestId]);
 
   // ---------------- SUBMIT ----------------
   const onSubmit = async (values) => {
@@ -78,7 +86,7 @@ export default function CreateCart() {
       if (!editId) {
         await api.post("/cart/addtocart", values);
       } else {
-        await api.put(`/cart/update-cart/${editId}`, values);
+        await api.put(`/cart/updatecart/${editId}`, values);
         setEditId(null);
       }
 
@@ -94,7 +102,7 @@ export default function CreateCart() {
     setEditId(item._id);
 
     form.reset({
-      guestId: guestId,
+      guestId: form.getValues("guestId"),
       product: item.product?._id || "",
       variant: item.variant?._id || "",
       quantity: item.quantity,
@@ -108,10 +116,13 @@ export default function CreateCart() {
   const handleDelete = async (cartItemId) => {
     try {
       await api.delete("/cart/deletecart", {
-        data: { cartItemId, guestId },
+        data: {
+          cartItemId,
+          guestId: form.getValues("guestId"),
+        },
       });
 
-      getCart(guestId);
+      getCart(form.getValues("guestId"));
     } catch (err) {
       console.error(err);
     }
@@ -142,7 +153,7 @@ export default function CreateCart() {
         </form>
       </Form>
 
-      {/* -------- TABLE -------- */}
+      {/* ---------------- TABLE ---------------- */}
       <Table>
         <TableHeader>
           <TableRow>
@@ -150,20 +161,21 @@ export default function CreateCart() {
             <TableHead>Qty</TableHead>
             <TableHead>Size</TableHead>
             <TableHead>Color</TableHead>
-            <TableHead>Total Price</TableHead>
+            <TableHead>Total</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {Array.isArray(carts) && carts.length > 0 ? (
+          {carts.length > 0 ? (
             carts.map((item) => (
               <TableRow key={item._id}>
-                <TableCell>{item.variant?.name || item.variant}</TableCell>
+                <TableCell>{item.name}</TableCell>
                 <TableCell>{item.quantity}</TableCell>
-                <TableCell>{item.size}</TableCell>
-                <TableCell>{item.color}</TableCell>
-                <TableCell>{item.totalPrice || "Na"}</TableCell>
+                <TableCell>{item.size || "-"}</TableCell>
+                <TableCell>{item.color || "-"}</TableCell>
+                <TableCell>{item.totalPrice}</TableCell>
+
                 <TableCell className="flex gap-2">
                   <Button
                     onClick={() => handleEdit(item)}
@@ -171,6 +183,7 @@ export default function CreateCart() {
                   >
                     Edit
                   </Button>
+
                   <Button
                     onClick={() => handleDelete(item._id)}
                     className="bg-red-600"
@@ -182,7 +195,9 @@ export default function CreateCart() {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={6}>No Cart Items</TableCell>
+              <TableCell colSpan={6} className="text-center">
+                No Cart Items
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
