@@ -261,3 +261,43 @@ export const useGetAllDeliverycharge = () => {
     },
   });
 };
+
+// GetAllOrder
+
+export const useGetAllOrder = () => {
+  return useQuery({
+    queryKey: ["getallOrder"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/order/allorder", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+// GetAllCourier
+
+export const useGetAllCourier = () => {
+  return useQuery({
+    queryKey: ["getallCourier"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/order/getallsingleReturnRequest", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};

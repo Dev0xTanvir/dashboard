@@ -257,6 +257,22 @@ const data = {
     },
 
     {
+      title: "Order",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Order",
+          url: "CreateOrder",
+        },
+        {
+          title: "All Order",
+          url: "#",
+        },
+      ],
+    },
+
+    {
       title: "Settings",
       url: "#",
       icon: Settings2,

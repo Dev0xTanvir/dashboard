@@ -18,6 +18,7 @@ import CreateShipinginfo from "./components/Dashboard/Shipinginfo/Shipinginfo";
 import CreateWearhouse from "./components/Dashboard/Wearhouse/Wearhouse";
 import CreateCart from "./components/Dashboard/Cart/Cart";
 import CreateDeliverycharge from "./components/Dashboard/Deliverycharge/Deliverycharge";
+import CreateOrder from "./components/Dashboard/Order/Order";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => {
             <Route path="/CreateWearhouse" element={<CreateWearhouse />} />
             <Route path="/CreateCart" element={<CreateCart />} />
             <Route path="/CreateDeliverycharge" element={<CreateDeliverycharge />} />
+            <Route path="/CreateOrder" element={<CreateOrder />} />
           </Route>
           <Route>
             <Route path="/singup" element={<SignupPage />} />
