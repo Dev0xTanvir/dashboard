@@ -110,14 +110,18 @@ export default function CreateOrder() {
   // ------------------------------------
 
   const getCouriers = async () => {
-    const res = await api.get("/order/getallcourier");
-    setCouriers(res.data.data || []);
-  };
+  try {
+    const res = await api.get("/order/getallsingleReturnRequest");
+    setCouriers(res.data?.data || []);
+  } catch (error) {
+    console.error("Courier fetch error:", error);
+  }
+};
 
-  useEffect(() => {
-    getOrders();
-    getCouriers();
-  }, []);
+useEffect(() => {
+  getOrders();
+  getCouriers();
+}, []);
 
   // ---------------- CREATE COURIER ----------------
 
@@ -206,6 +210,7 @@ export default function CreateOrder() {
             <TableHead>Email</TableHead>
             <TableHead>Payment</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>TransactionId</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -228,7 +233,8 @@ export default function CreateOrder() {
 
               <TableCell>{item.paymentMethod}</TableCell>
 
-              <TableCell>{item.status}</TableCell>
+              <TableCell>{item.orderStatus}</TableCell>
+              <TableCell>{item.transactionId}</TableCell>
 
               <TableCell className="flex gap-2">
                 <Button
@@ -322,9 +328,9 @@ export default function CreateOrder() {
         <TableBody>
           {couriers.map((item) => (
             <TableRow key={item._id}>
-              <TableCell>{item._id}</TableCell>
-              <TableCell>{item.orderId}</TableCell>
-              <TableCell>{item.note || "-"}</TableCell>
+              <TableCell>{item.courier?.name || "-"}</TableCell>
+              <TableCell>{item.courier?.trackingId || "-"}</TableCell>
+              <TableCell>{item.courier?.status || "-"}</TableCell>
               <TableCell>{item.status || "-"}</TableCell>
               <TableCell>
                 {item.createdAt
