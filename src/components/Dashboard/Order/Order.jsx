@@ -110,18 +110,19 @@ export default function CreateOrder() {
   // ------------------------------------
 
   const getCouriers = async () => {
-  try {
-    const res = await api.get("/order/getallsingleReturnRequest");
-    setCouriers(res.data?.data || []);
-  } catch (error) {
-    console.error("Courier fetch error:", error);
-  }
-};
+    try {
+      const res = await api.get("/order/getallsingleReturnRequest");
+      setCouriers(res.data?.data || []);
+      console.log("API RESPONSE:", res.data);
+    } catch (error) {
+      console.error("Courier fetch error:", error);
+    }
+  };
 
-useEffect(() => {
-  getOrders();
-  getCouriers();
-}, []);
+  useEffect(() => {
+    getOrders();
+    getCouriers();
+  }, []);
 
   // ---------------- CREATE COURIER ----------------
 
@@ -317,28 +318,36 @@ useEffect(() => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Courier ID</TableHead>
+            <TableHead>consignment Id</TableHead>
+            <TableHead>Invoice</TableHead>
+            <TableHead>Tracking ID</TableHead>
             <TableHead>Order ID</TableHead>
-            <TableHead>Note</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {couriers.map((item) => (
-            <TableRow key={item._id}>
-              <TableCell>{item.courier?.name || "-"}</TableCell>
-              <TableCell>{item.courier?.trackingId || "-"}</TableCell>
-              <TableCell>{item.courier?.status || "-"}</TableCell>
-              <TableCell>{item.status || "-"}</TableCell>
-              <TableCell>
-                {item.createdAt
-                  ? new Date(item.createdAt).toLocaleDateString()
-                  : "-"}
+          {couriers?.length > 0 ? (
+            couriers.map((item) => (
+              <TableRow key={item._id}>
+                <TableCell>{item?.consignment_id || "-"}</TableCell>
+
+                <TableCell>{item.invoiceId || "-"}</TableCell>
+
+                <TableCell>{item.trackingId || "-"}</TableCell>
+
+                <TableCell>{item._id || "-"}</TableCell>
+
+                <TableCell>{item?.status || "in_review"}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan="5" className="text-center">
+                No Courier Found
               </TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </div>
