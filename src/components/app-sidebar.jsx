@@ -273,6 +273,38 @@ const data = {
     },
 
     {
+      title: "Role",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Role",
+          url: "CreateRole",
+        },
+        {
+          title: "All Role",
+          url: "#",
+        },
+      ],
+    },
+
+    {
+      title: "Permision",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create Permision",
+          url: "CreatePermision",
+        },
+        {
+          title: "All Permision",
+          url: "#",
+        },
+      ],
+    },
+
+    {
       title: "Settings",
       url: "#",
       icon: Settings2,

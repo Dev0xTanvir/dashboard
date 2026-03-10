@@ -201,7 +201,6 @@ export const useGetAllShipinginfo = () => {
   });
 };
 
-
 // GetAllWearhouse
 
 export const useGetAllWearhouse = () => {
@@ -291,6 +290,46 @@ export const useGetAllCourier = () => {
       const accessToken = JSON.parse(localStorage.getItem("accessToken"));
 
       const response = await api.get("/order/getallsingleReturnRequest", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+// GetAllRole
+
+export const useGetAllRole = () => {
+  return useQuery({
+    queryKey: ["getallRole"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/role/getall-role", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
+
+// GetAllPermision
+
+export const useGetAllPermision = () => {
+  return useQuery({
+    queryKey: ["getallPermision"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/permision/getall-permision", {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
