@@ -304,6 +304,22 @@ const data = {
       ],
     },
 
+     {
+      title: "UserRole",
+      url: "#",
+      icon: Bot,
+      items: [
+        {
+          title: "Create UserRole",
+          url: "CreateUserRole",
+        },
+        {
+          title: "All UserRole",
+          url: "#",
+        },
+      ],
+    },
+
     {
       title: "Settings",
       url: "#",
@@ -327,6 +343,7 @@ const data = {
         },
       ],
     },
+
   ],
   projects: [
     {

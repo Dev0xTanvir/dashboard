@@ -21,6 +21,7 @@ import CreateDeliverycharge from "./components/Dashboard/Deliverycharge/Delivery
 import CreateOrder from "./components/Dashboard/Order/Order";
 import CreateRole from "./components/Dashboard/Role/Role";
 import CreatePermision from "./components/Dashboard/Permision/Permision";
+import CreateUserRole from "./components/Dashboard/UserRole/UserRole";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/CreateOrder" element={<CreateOrder />} />
             <Route path="/CreateRole" element={<CreateRole />} />
             <Route path="/CreatePermision" element={<CreatePermision />} />
+            <Route path="/CreateUserRole" element={<CreateUserRole />} />
           </Route>
           <Route>
             <Route path="/singup" element={<SignupPage />} />

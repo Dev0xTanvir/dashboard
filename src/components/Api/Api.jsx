@@ -340,3 +340,23 @@ export const useGetAllPermision = () => {
     },
   });
 };
+
+// GetAllUserRole
+
+export const useGetAllUserRole = () => {
+  return useQuery({
+    queryKey: ["getallUserRole"],
+    queryFn: async () => {
+      const accessToken = JSON.parse(localStorage.getItem("accessToken"));
+
+      const response = await api.get("/user/getalluserrole", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        withCredentials: true,
+      });
+
+      return response.data.data;
+    },
+  });
+};
