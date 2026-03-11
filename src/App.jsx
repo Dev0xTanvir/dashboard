@@ -22,6 +22,7 @@ import CreateOrder from "./components/Dashboard/Order/Order";
 import CreateRole from "./components/Dashboard/Role/Role";
 import CreatePermision from "./components/Dashboard/Permision/Permision";
 import CreateUserRole from "./components/Dashboard/UserRole/UserRole";
+import CreateUserPermision from "./components/Dashboard/UserPermision/Permision";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => {
             <Route path="/CreateRole" element={<CreateRole />} />
             <Route path="/CreatePermision" element={<CreatePermision />} />
             <Route path="/CreateUserRole" element={<CreateUserRole />} />
+            <Route path="/CreateUserPermision" element={<CreateUserPermision />} />
           </Route>
           <Route>
             <Route path="/singup" element={<SignupPage />} />

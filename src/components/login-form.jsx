@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { json, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "@/lib/utils";
@@ -57,7 +57,7 @@ export function LoginForm({ className, ...props }) {
         console.log(response.data.data);
         localStorage.setItem(
           "accessToken",
-          JSON.stringify(response.data.data.accessToken)
+          JSON.stringify(response.data.data.accessToken),
         );
         navigate("/");
       }
